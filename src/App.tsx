@@ -30,7 +30,7 @@ finally {
 }
 
 const get = (path, obj = scanData) => {
-path.split(".").reduce((acc, key) => acc?.[key], obj) ?? "N/A";
+return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? "N/A";
 }
 
 
@@ -64,8 +64,9 @@ className="px-3 py-1 bg-white text-black rounded-md cursor-pointer shrink-0 disa
 </button>
 </form>
 
-<p>{getIPs()}</p>
-
+<p>Domain: {get("site.domain")}</p>
+<p>Ip Address: {getIPs().join(",  ")}</p>
+<p>Running On: {get("site.running_on")}</p>
   </div>
   </div>
 )
