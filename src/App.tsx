@@ -34,6 +34,23 @@ return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? "N/A";
 }
 
 
+const urls = () => {
+  const raw = get("links.urls");
+  if (Array.isArray(raw)) {
+    return raw.length ? raw : ["N/A"];
+  }
+  return [raw || "N/A"];
+}
+
+const jsurl = () => {
+  const raw = get("links.js_local");
+  if (Array.isArray(raw)) {
+    return raw.length ? raw : ["N/A"];
+  }
+  return [raw || "N/A"];
+}
+
+
 const getIPs = () => {
     const raw = get("site.ip");
     if (Array.isArray(raw)) {
@@ -60,13 +77,54 @@ className="flex-grow bg-transparent text-white focus:outline-none min-w-[160px]"
 <button
 type="submit"
 className="px-3 py-1 bg-white text-black rounded-md cursor-pointer shrink-0 disabled:opacit-50">
-[ENTER]
+Click here to check
 </button>
 </form>
-
+<img src={`https://www.google.com/s2/favicons?domain=${urlInput}&sz=128`} alt="Favicon"></img>
 <p>Domain: {get("site.domain")}</p>
 <p>Ip Address: {getIPs().join(",  ")}</p>
 <p>Running On: {get("site.running_on")}</p>
+<p> Powered By: {get("site.powered_by")}</p>
+<p> CDN: {Array.isArray(get("site.cdn"))
+    ? get("site.cdn").join(", ")
+    : "Direct / Unknown"}</p>
+
+<p>RATINGS:</p>
+<p>
+  -- Domain: 
+  Score: {get("ratings.domain.passed")} || Rating: {get("ratings.domain.rating")}
+</p>
+<p>
+  -- TLS: 
+  Score: {get("ratings.tls.passed")} || Rating: {get("ratings.tls.rating")}
+</p>
+<p>
+  -- Security:
+  Score: {get("ratings.security.passed")} || Rating: {get("ratings.security.rating")}
+</p>
+
+<p>
+  -- Final Overall Score:
+
+  Score: 6/6
+  Rating: {get("ratings.total.rating")}
+</p>
+
+<p>
+  -- URLS: <br/> {urls().map((url) => (
+    <div>
+    <a key={url} href={`${get("site.final_url").slice(0, -1)}${url}`}>{get("site.final_url").slice(0, -1)}{url} </a>
+    <br/>
+    </div>
+  ))}
+</p>
+
+<p>
+  -- JS URLS: 
+  <br/>{jsurl().map((url) => (
+    <a key={url} href={`${get("site.final_url").slice(0, -1)}${url}`}>{get("site.final_url").slice(0, -1)}{url} </a>
+  ))}
+</p>
   </div>
   </div>
 )
